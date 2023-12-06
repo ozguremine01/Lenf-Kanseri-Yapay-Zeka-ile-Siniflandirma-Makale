@@ -468,52 +468,7 @@ plt.imshow(Rotated2_image,cmap=plt.cm.gray)
 plt.show()
 """
 
-"""
-Açılı
 
-categories= ['CLL', 'FL', 'MCL']
-dir='C:\\Users\\Pc\\Downloads\\archive\\'
-data=[]
-features1=[]
-labels=[]
-feature_matrix = np.zeros((600,600)) 
-angle =[90,180,270,360]
-
-for category in categories:
-    path=os.path.join(dir,category)
-    label= categories.index(category)
-    for img6 in os.listdir(path):
-        imgpath=os.path.join(path,img6)
-        image2=cv.imread(imgpath,cv.COLOR_BGR2RGB)
-        image = cv.resize(image2, (600,600))
-        for x in angle:
-            Rotated = imutils.rotate(image, angle=x)
-            for i in range(0,Rotated.shape[0]):
-                for j in range(0,Rotated.shape[1]):
-                    feature_matrix[i][j] = round((int(Rotated[i,j,0]) + int(Rotated[i,j,1]) + int(Rotated[i,j,2]))/3)
-            img_array=np.array(feature_matrix).flatten()
-            print(img_array,"                      ",label)
-            data.append([img_array,label])
-            
-print(len(data))
-for feature,label in data:
-    features1.append(feature)
-    labels.append(label)
-
-from sklearn.model_selection import train_test_split
-x_train, x_test, y_train, y_test = train_test_split(features1, labels, test_size=0.20, random_state=10)
-
-from sklearn.ensemble import RandomForestClassifier
-randomfc= RandomForestClassifier()
-randomfc.fit(x_train, y_train)
-prediction2=randomfc.predict(x_test)
-accuracy2=randomfc.score(x_test,y_test)
-
-print('random forest Accuracy: ', accuracy2)
-print('random forest Prediction: ', categories[prediction2[60]])
-print("etiketi: ", y_test[60])
-
-"""
 """
 from sklearn.feature_selection import RFE
 from sklearn.linear_model import LogisticRegression
@@ -530,64 +485,7 @@ accuracy2=rfe.score(x_test,y_test)
 
 print('random forest Accuracy: ', accuracy2)
 """
-"""
 
-açılara göre entropi çıkarımı 
-
-angle =[90,180,270,360]
-categories= ['CLL', 'FL', 'MCL']
-dir='C:\\Users\\Pc\\Downloads\\archive\\'
-entropy10=[]
-for category in categories:
-        path=os.path.join(dir,category)
-        label= categories.index(category)
-        for img6 in os.listdir(path):
-            imgpath=os.path.join(path,img6)                       
-            image1=cv.imread(imgpath, cv.IMREAD_GRAYSCALE)
-            image1 = cv.resize(image1, (400,400))
-            image2=cv.imread(imgpath,cv.COLOR_BGR2RGB)
-            image2 = cv.resize(image2, (400,400))
-            for x in angle:
-                Rotated = imutils.rotate(image1, angle=x)
-                Rotated2 = imutils.rotate(image2, angle=x)
-                entropy2 = calcEntropy(Rotated)
-                entropy3 = calcEntropy_R(Rotated2)
-                entropy4 = calcEntropy_G(Rotated2)
-                entropy5 = calcEntropy_B(Rotated2)   
-                print(np.ndim(entropy5))
-                
-                print(entropy2, "   ", entropy3, "   ",entropy4, "   ",entropy5, "   ")      
-                entropy10.append([entropy2,entropy3,entropy4,entropy5,label])
-
-print(len(entropy10))
-print(np.ndim(entropy10))
-features=[]
-labels=[]
-from sklearn.model_selection import train_test_split
-
-for feature,entropy,entropy1,entropy9,label in entropy10:
-    features.append([feature,entropy[0],entropy1[0],entropy9[0]])
-    labels.append(label)
-
-x_train, x_test, y_train, y_test = train_test_split(features, labels, test_size=0.30, random_state=10)
-
-print(y_train)
-print(y_test)
-print(len(y_train))
-print(len(y_test))
-
-from sklearn.ensemble import RandomForestClassifier
-randomfc= RandomForestClassifier()
-randomfc.fit(x_train, y_train)
-prediction2=randomfc.predict(x_test)
-accuracy2=randomfc.score(x_test,y_test)
-from sklearn import metrics
-print('random forest Accuracy: ', accuracy2)
-print('random forest Accuracy1: ', metrics.accuracy_score(y_test,prediction2))
-print('random forest Accuracy2: ', metrics.confusion_matrix(y_test,prediction2))
-print('random forest Prediction: ', categories[prediction2[60]])
-print("etiketi: ", y_test[60])
-"""
 
 """
 
@@ -864,101 +762,7 @@ print('random forest Accuracy2: ', metrics.confusion_matrix(y_test,prediction3))
 """
 """
 
-Train Test ayırma
 
-
-categories= ['CLL', 'FL', 'MCL']
-dir='C:\\Users\\Pc\\Downloads\\archive\\'
-labels1=[]
-features1=[]
-for category in categories:
-        path=os.path.join(dir,category)
-        label= categories.index(category)
-        for img6 in os.listdir(path):
-            imgpath=os.path.join(path,img6)                       
-            image1=cv.imread(imgpath, cv.IMREAD_COLOR)
-            image1 = cv.resize(image1, (300,300))
-            image1=cv.cvtColor(image1, cv.COLOR_RGB2BGR)
-            features1.append(image1/255)
-            labels1.append(label)
-                
-                
-
-print(len(features1))
-print(np.ndim(features1))
-print(len(labels1))
-print(np.ndim(labels1))
-
-from sklearn.model_selection import train_test_split
-
-
-features= np.array(features1)
-labels =np.array(labels1)
-
-x_train, x_test, y_train, y_test = train_test_split(features, labels, test_size=0.20, random_state=10)
-
-print(x_train.shape)
-print(x_test.shape)
-print(y_train.shape)
-print(y_test.shape)
-
-print(y_train)
-print(y_test)
-print(len(x_train))
-print(len(x_test))
-print(len(y_train))
-print(len(y_test))
-
-from keras.models import Model, Sequential
-from keras.layers import Dense, Conv2D, MaxPool2D, Activation,Flatten
-from keras.layers.normalization import BatchNormalization
-"""
-"""
-model = Sequential()
-
-model.add(Conv2D(filters=96, input_shape=(227,227,3), kernel_size=(3,3),strides=(1,1),padding='valid'))
-model.add(Activation('relu'))
-
-model.add(MaxPool2D(pool_size=(3,3),strides=(2,2),padding='valid'))
-model.add(Conv2D(filters=256, kernel_size=(5,5),strides=(1,1),padding='valid'))
-model.add(Activation('relu'))
-
-model.add(MaxPool2D(pool_size=(3,3),strides=(2,2),padding='valid'))
-
-model.add(Conv2D(filters=384, kernel_size=(3,3),strides=(1,1),padding='valid'))
-model.add(Activation('relu'))
-
-model.add(Conv2D(filters=384, kernel_size=(3,3),strides=(1,1),padding='valid'))
-model.add(Activation('relu'))
-
-model.add(Conv2D(filters=256, kernel_size=(3,3),strides=(1,1),padding='valid'))
-model.add(Activation('relu'))
-
-model.add(MaxPool2D(pool_size=(3,3),strides=(2,2),padding='valid'))
-model.add(Flatten())
-"""
-"""
-import keras
-from tensorflow.keras import layers
-model= keras.Sequential(
-    [
-        layers.Input(shape=(300,300,3)),
-        layers.Conv2D(16, kernel_size=(3,3), activation="relu"),
-        layers.MaxPooling2D(pool_size=(2,2)),
-        layers.Conv2D(32, kernel_size=(3,3), activation="relu"),
-        layers.MaxPooling2D(pool_size=(2,2)),
-        layers.Conv2D(64,kernel_size=(3,3), activation="relu"),
-        layers.MaxPooling2D(pool_size=(2,2)),
-        layers.Conv2D(128,kernel_size=(3,3), activation="relu"),
-        layers.MaxPooling2D(pool_size=(2,2)),
-        layers.Flatten(),
-        layers.Dropout(0.5),
-        layers.Dense(3, activation="softmax")
-        
-    ]
-)
-model.summary()
-"""
 """
 datagen = ImageDataGenerator(
         featurewise_center=False,  # set input mean to 0 over the dataset
