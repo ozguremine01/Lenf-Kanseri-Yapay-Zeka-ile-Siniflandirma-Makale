@@ -327,62 +327,6 @@ print('SVC Prediction: ', categories[prediction[60]])
 
 """
 
-"""
-
-RGB ORTALAMALARINI ALMA 
-
-image = cv.imread('C:/Users/Pc/Downloads/archive/CLL/sj-05-1396-R3_006.tif', cv.COLOR_BGR2RGB)
-image = cv.resize(image, (600,600))
-feature_matrix = np.zeros((600,600)) 
-print(feature_matrix.shape)
-for i in range(0,image.shape[0]):
-    for j in range(0,image.shape[1]):
-        feature_matrix[i][j] = ((int(image[i,j,0]) + int(image[i,j,1]) + int(image[i,j,2]))/3)
-features = np.reshape(feature_matrix, (600*600)) 
-print(features.shape)
-print(features)
-
-"""
-
-"""
-
-ÖNEMLİ 2 
-
-
-feature_matrix = np.zeros((600,600)) 
-categories= ['CLL', 'FL', 'MCL']
-dir='C:\\Users\\Pc\\Downloads\\archive\\'
-data=[]
-entropy=[]
-x=1
-while x<3:
-    x=x+1
-    for category in categories:
-        path=os.path.join(dir,category)
-        label= categories.index(category)
-        for img6 in os.listdir(path):
-            imgpath=os.path.join(path,img6)
-            image1=cv.imread(imgpath, cv.COLOR_BGR2RGB)
-            image = cv.resize(image1, (600,600))
-            for i in range(0,image.shape[0]):
-                for j in range(0,image.shape[1]):
-                    feature_matrix[i][j] = ((int(image[i,j,0]) + int(image[i,j,1]) + int(image[i,j,2]))/3)
-            features = np.reshape(feature_matrix, (600*600))
-            img_array=np.array(features).flatten()
-            print(img_array,"                      ",label)
-            data.append([img_array,label])
-            
-print(len(data))
-
-features=[]
-labels=[]
-from sklearn.model_selection import train_test_split
-from sklearn.svm import SVC
-for feature,label in data:
-    features.append([feature,label])
-    print(feature, "  ", label)
-    labels.append(label)
-"""
 
 
 """
@@ -552,66 +496,6 @@ print("etiketi: ", y_test[60])
 """
 import pandas as pd
 
-import pywt
-"""
- 
-ROTASYONLA DWT
-angle =[90,180,270,360]
-categories= ['CLL', 'FL', 'MCL']
-dir='C:\\Users\\Pc\\Downloads\\archive\\'
-entropy10=[]
-for category in categories:
-        path=os.path.join(dir,category)
-        label= categories.index(category)
-        for img6 in os.listdir(path):
-            imgpath=os.path.join(path,img6)                       
-            image1=cv.imread(imgpath, cv.IMREAD_GRAYSCALE)
-            image1 = cv.resize(image1, (400,400))
-            image2=cv.imread(imgpath,cv.COLOR_BGR2RGB)
-            image2 = cv.resize(image2, (400,400))
-            for x in angle:
-                Rotated = imutils.rotate(image1, angle=x)
-                Rotated2 = imutils.rotate(image2, angle=x)
-
-                deneme2 = pywt.dwt2(Rotated, 'db3', mode='periodization')
-
-                cA,(cH,cV,cD) = deneme2
-                print(cA.shape)
-                print(cA)
-                deneme3 = pywt.idwt2(deneme2, 'db3', mode='periodization')
-                img= np.uint8(deneme3)
-                img_array=np.array(img).flatten()
-                print(img_array)
-                entropy10.append([img_array,label])
-
-
-print(len(entropy10))
-print(np.ndim(entropy10))
-features=[]
-labels=[]
-from sklearn.model_selection import train_test_split
-
-for feature,label in entropy10:
-    features.append(feature)
-    labels.append(label)
-
-x_train, x_test, y_train, y_test = train_test_split(features, labels, test_size=0.30, random_state=10)
-
-print(y_train)
-print(y_test)
-print(len(y_train))
-print(len(y_test))
-
-from sklearn.ensemble import RandomForestClassifier
-randomfc= RandomForestClassifier()
-randomfc.fit(x_train, y_train)
-prediction2=randomfc.predict(x_test)
-accuracy2=randomfc.score(x_test,y_test)
-from sklearn import metrics
-print('random forest Accuracy: ', accuracy2)
-print('random forest Accuracy1: ', metrics.accuracy_score(y_test,prediction2))
-print('random forest Accuracy2: ', metrics.confusion_matrix(y_test,prediction2))
-"""
 
 
 """
@@ -942,7 +826,6 @@ print('random forest Accuracy2: ', metrics.confusion_matrix(y_test,prediction2))
 """
 Pre-Trained   Transfer Learning
 
-VGG16 + PCA() + ML -> ASIL KODLAR
 
 angle =[90,180,270,360]
 #categories= ['CLL', 'FL', 'MCL']
@@ -974,17 +857,7 @@ labels =np.array(labels1)
 x_train, x_test, y_train, y_test = train_test_split(features, labels, test_size=0.20)
 
 # , random_state=10
-print(x_train.shape)
-print(x_test.shape)
-print(y_train.shape)
-print(y_test.shape)
 
-print(y_train)
-print(y_test)
-print(len(x_train))
-print(len(x_test))
-print(len(y_train))
-print(len(y_test))
 
 
 
@@ -1057,19 +930,6 @@ print(report)
 
 
 
-from sklearn.neighbors import KNeighborsClassifier
-knnmodel= KNeighborsClassifier(n_neighbors=5, metric='minkowski')
-#ya da 10 yaz -> daha önce öyle yaptım.
-
-knnmodel.fit(train_PCA, y_train)
-prediction_knnmodel = knnmodel.predict(test_PCA)
-print ("KNN Accuracy = ", metrics.accuracy_score(y_test, prediction_knnmodel))
-#Confusion Matrix - verify accuracy of each class
-from sklearn.metrics import confusion_matrix
-cm = confusion_matrix(y_test, prediction_knnmodel)
-print(cm)
-report = metrics.classification_report(y_test, prediction_knnmodel)
-print(report)
 
 
 
@@ -1135,18 +995,6 @@ entropy3=[]
 categories= ['FL','CLL']
 dir='C:\\Users\\Pc\\Downloads\\archive\\'
 entropy10=[]
-
-for category in categories:
-        path=os.path.join(dir,category)
-        label= categories.index(category)
-        for img6 in os.listdir(path):
-            imgpath=os.path.join(path,img6)                       
-            image1=cv.imread(imgpath, cv.IMREAD_GRAYSCALE)
-            image1 = cv.resize(image1, (400,400))
-            equalized1 = cv.equalizeHist(image1)
-            entropy2 = calcEntropy(equalized1)
-            entropy3.append(entropy2)
-            entropy10.append([equalized1,label])
 
 for category in categories:
         path=os.path.join(dir,category)
@@ -1327,15 +1175,6 @@ categories= ['CLL','FL','MCL']
 dir='C:\\Users\\Pc\\Downloads\\archive\\'
 entropy10=[]
 
-for category in categories:
-        path=os.path.join(dir,category)
-        label= categories.index(category)
-        for img6 in os.listdir(path):
-            imgpath=os.path.join(path,img6)                       
-            image1=cv.imread(imgpath, cv.IMREAD_GRAYSCALE)
-            image1 = cv.resize(image1, (400,400))
-            equalized1 = cv.equalizeHist(image1)
-            entropy10.append([equalized1,label])
 
 
 for category in categories:
@@ -1805,26 +1644,6 @@ print(len(y_test))
 
 
 
-from sklearn.ensemble import RandomForestClassifier
-RF_model = RandomForestClassifier(n_estimators = 100)
-
-# , random_state = 10  -> eliydi çıkardım.
-# Train the model on training data
-RF_model.fit(x_train, y_train) #For sklearn no one hot encoding
-
-prediction_RF = RF_model.predict(x_test)
-#Inverse le transform to get original label back. 
-#Print overall accuracy
-from sklearn import metrics
-print ("RF Accuracy = ", metrics.accuracy_score(y_test, prediction_RF))
-#Confusion Matrix - verify accuracy of each class
-from sklearn.metrics import confusion_matrix
-cm = confusion_matrix(y_test, prediction_RF)
-print(cm)
-report = metrics.classification_report(y_test, prediction_RF)
-print(report)
-
-
 
 from sklearn.neighbors import KNeighborsClassifier
 knnmodel= KNeighborsClassifier(n_neighbors=5, metric='minkowski')
@@ -2019,18 +1838,6 @@ report = metrics.classification_report(y_test, prediction_naivebayes)
 print(report)
 
 
-
-from sklearn.tree import DecisionTreeClassifier
-decision= DecisionTreeClassifier()
-decision.fit(train_PCA, y_train)
-prediction_decision = decision.predict(test_PCA)
-print ("Decision Tree Accuracy = ", metrics.accuracy_score(y_test, prediction_decision))
-#Confusion Matrix - verify accuracy of each class
-from sklearn.metrics import confusion_matrix
-cm = confusion_matrix(y_test, prediction_decision)
-print(cm)
-report = metrics.classification_report(y_test, prediction_decision)
-print(report)
 
 
 
